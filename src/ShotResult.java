@@ -1,5 +1,5 @@
 public enum ShotResult {
-    HIT("💥"), MISS("🌊"), ALREADY_SHOT("🚫");
+    HIT("💥"), MISS("🌊");
 
     private final String symbol;
 

@@ -48,9 +48,9 @@ public class PlayingField {
 
     public void printField(boolean showShips){
         System.out.println();
-        for (int y = 1; y <= this.height; y++) {
+        for (int y = 1; y <= getHeight(); y++) {
             System.out.print(y != 10 ? y + " ": y);
-            for (int x = 1; x <= this.width; x++) {
+            for (int x = 1; x <= getWidth(); x++) {
                 Coordinate coord = new Coordinate(x, y);
                 ShotResult shot = mapShots.get(coord);
                 if(shot != null){

@@ -23,11 +23,4 @@ public class Ship {
         return direction;
     }
 
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
-    public void printShip(){
-        System.out.println(icon);
-    }
 }
