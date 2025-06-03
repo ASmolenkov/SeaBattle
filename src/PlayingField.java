@@ -1,3 +1,5 @@
+import game.constans.GameConstants;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,7 +11,10 @@ public class PlayingField {
     private Map<Coordinate,Ship> mapShips;
     private Map<Coordinate, ShotResult> mapShots;
     private int shipCounts;
-    public final int MAX_COUNT_SHIPS = 3;
+    public static final int MAX_COUNT_SHIPS = 3;
+
+
+
 
     public PlayingField(int width, int height, boolean isOwnField) {
         this.width = width;
@@ -46,7 +51,7 @@ public class PlayingField {
         return mapShips;
     }
 
-    public void printField(boolean showShips){
+    public void printField(FieldType fieldType){
         System.out.println();
         for (int y = 1; y <= getHeight(); y++) {
             System.out.print(y != 10 ? y + " ": y);
@@ -56,7 +61,7 @@ public class PlayingField {
                 if(shot != null){
                     System.out.print(shot.getSymbol());
                 }
-                else if(showShips && isOccupied(x, y)){
+                else if(fieldType == FieldType.PLAYER && isOccupied(x, y)){
                     System.out.print(ConstantUnicodeEmoji.SHIP);
                 }
                 else {
@@ -79,25 +84,25 @@ public class PlayingField {
 
             }
             plusShipCounts();
-            System.out.println("Корабль установлен! осталось " + (MAX_COUNT_SHIPS - shipCounts) + " кораблей" );
+            System.out.printf(GameConstants.Templates.SHIP_SETUP_TEMPLATE,(MAX_COUNT_SHIPS - shipCounts));
         }
         else {
-            System.out.println("Корабль не установлен, измените координаты или направление!");
+            System.out.println(GameConstants.Errors.SHIP_SETUP_ERROR);
         }
     }
     public boolean shot(Coordinate coordinateShoot){
         if(this.mapShips.containsKey(coordinateShoot)){
             mapShips.remove(coordinateShoot);
             mapShots.put(coordinateShoot,ShotResult.HIT);
-            System.out.println("Попал");
+            System.out.println(GameConstants.Messages.HIT_TARGET);
             if(!hasAdjacentShips(coordinateShoot)){
-                System.out.println("Корабль уничтожен!");
+                System.out.println(GameConstants.Messages.SHIP_DESTROYED);
                 minusShipCounts();
             }
             return true;
         }
             mapShots.put(coordinateShoot,ShotResult.MISS);
-            System.out.println("Мимо");
+            System.out.println(GameConstants.Messages.MISS);
         return false;
     }
 

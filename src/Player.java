@@ -1,8 +1,12 @@
+import game.constans.GameConstants;
+
 public class Player {
     private String name;
     private PlayingField ownField;
     private PlayingField enemyField;
     private ConsoleInputReader consoleInputReader;
+
+
 
 
     public Player(String name) {
@@ -31,13 +35,13 @@ public class Player {
     public Coordinate makeMove(){
        while (true) {
            try {
-               System.out.println(this.name + " введите координату выстрела по оси X");
+               System.out.printf(GameConstants.Templates.COORDINATE_SHOOT_X_TEMPLATE, this.name);
                int coordinateShotX = Integer.parseInt(consoleInputReader.readLine());
-               System.out.println(this.name + " введите координату выстрела по оси Y");
+               System.out.printf(GameConstants.Templates.COORDINATE_SHOOT_Y_TEMPLATE, this.name);
                int coordinateShotY = Integer.parseInt(consoleInputReader.readLine());
                return new Coordinate(coordinateShotX, coordinateShotY);
            } catch (NumberFormatException e) {
-               System.out.println("Некорректный ввод");
+               System.out.println(GameConstants.Errors.INVALID_ERROR);
            }
        }
 

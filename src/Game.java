@@ -6,8 +6,6 @@ public class Game {
     private Player currentPlayer;
     private final ConsoleInputReader consoleInputReader;
     private final InputValidator inputValidator;
-    private static final boolean FIELD_PLAYER = true;
-    private static final boolean FIELD_OPPONENT = false;
 
 
     public Game() {
@@ -60,17 +58,15 @@ public class Game {
            int sizeShip = inputSizeShip();
            int coordinateShipX = inputCoordinateShipHead(GameConstants.Prompts.COORDINATE_HEAD_SHIP_X);
            int coordinateShipY = inputCoordinateShipHead(GameConstants.Prompts.COORDINATE_HEAD_SHIP_Y);
-           Direction direction = inputdirection();
+           Direction direction = inputDirection();
            player.placeShip(new Ship(sizeShip,new Coordinate(coordinateShipX ,coordinateShipY),direction));
-           player.getOwnField().printField(FIELD_PLAYER);
+           player.getOwnField().printField(FieldType.PLAYER);
        }
     }
     private void startWarProcess(){
         while (!isLoose(playerOne) && !isLoose(playerOpponent)) {
-            System.out.printf(GameConstants.Templates.PLAYER_MOVE_TEMPLATE, currentPlayer.getName());
-            System.out.printf(GameConstants.Templates.REMAINING_SHIPS_TEMPLATE, currentPlayer.getName(), currentPlayer.getOwnField().getShipCounts());
-            System.out.printf(GameConstants.Templates.REMAINING_SHIPS_TEMPLATE, playerOpponent.getName(), playerOpponent.getOwnField().getShipCounts());
-            currentPlayer.getEnemyField().printField(FIELD_OPPONENT);
+            displayCurrentTurnInfo();
+            currentPlayer.getEnemyField().printField(FieldType.OPPONENT);
             Coordinate shotCoordinate = currentPlayer.makeMove();
             boolean isHit = playerOpponent.getOwnField().shot(shotCoordinate);
             currentPlayer.getEnemyField().getMapShots().put(shotCoordinate, isHit ? ShotResult.HIT : ShotResult.MISS);
@@ -89,7 +85,7 @@ public class Game {
             String sizeShip = consoleInputReader.readLine();
             try {
                 int size = Integer.parseInt(sizeShip);
-                if (inputValidator.validateInputShipSize(size)) {
+                if (size >= 1 && size <= 4) {
                     return size;
                 }
                 else {
@@ -109,7 +105,7 @@ public class Game {
             String coordinateShip = consoleInputReader.readLine();
             try {
                 int coordinate = Integer.parseInt(coordinateShip);
-                if(inputValidator.validateInputCoordinates(coordinate)){
+                if(coordinate >= 1 && coordinate <= 10){
                     return coordinate;
                 }
                 else {
@@ -121,7 +117,7 @@ public class Game {
 
         }
     }
-    private Direction inputdirection(){
+    private Direction inputDirection(){
         while (true){
             System.out.printf(GameConstants.Templates.ENTER_TEMPLATE,GameConstants.Prompts.DIRECTIONS_SHIP + "\n");
             String directionShip = consoleInputReader.readLine();
@@ -143,6 +139,12 @@ public class Game {
 
     private boolean isLoose(Player player){
         return player.getOwnField().getShipCounts() == 0;
+    }
+
+    private void displayCurrentTurnInfo(){
+        System.out.printf(GameConstants.Templates.PLAYER_MOVE_TEMPLATE, currentPlayer.getName());
+        System.out.printf(GameConstants.Templates.REMAINING_SHIPS_TEMPLATE, currentPlayer.getName(), currentPlayer.getOwnField().getShipCounts());
+        System.out.printf(GameConstants.Templates.REMAINING_SHIPS_TEMPLATE, playerOpponent.getName(), playerOpponent.getOwnField().getShipCounts());
     }
 
 }
