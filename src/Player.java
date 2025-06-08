@@ -1,3 +1,5 @@
+import Console.work.ConsoleInputReader;
+import Console.work.ConsoleOutputService;
 import game.constans.GameConstants;
 
 public class Player {
@@ -11,8 +13,8 @@ public class Player {
 
     public Player(String name) {
         this.name = name;
-        this.ownField = new PlayingField(10,10, true);
-        this.enemyField = new PlayingField(10,10, false);
+        this.ownField = new PlayingField(10,10, true, new ConsoleOutputService());
+        this.enemyField = new PlayingField(10,10, false, new ConsoleOutputService());
         consoleInputReader = new ConsoleInputReader();
 
     }

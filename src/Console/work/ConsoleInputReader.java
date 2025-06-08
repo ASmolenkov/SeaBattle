@@ -1,3 +1,5 @@
+package Console.work;
+
 import java.util.Scanner;
 
 public class ConsoleInputReader {

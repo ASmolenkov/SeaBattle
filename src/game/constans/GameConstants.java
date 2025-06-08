@@ -10,6 +10,7 @@ public class GameConstants {
         public static final String MISS = "Мимо";
         public static final String HIT_TARGET = "Попадание!";
         public static final String SHIP_DESTROYED = "Корабль уничтожен!!!";
+        public static final String SHIP_OUT_OF_BOUNDS = "Корабль выходит за пределы поля. Измените координаты!";
     }
 
     public static final class Templates {
@@ -18,11 +19,13 @@ public class GameConstants {
         public static final String INSTALL_THE_SHIPS_TEMPLATE = "Игрок %s расставь свои корабли! \n";
         public static final String ENTER_TEMPLATE = "Введите %s";
         public static final String PLAYER_MOVE_TEMPLATE = "Ход игрока: %s \n";
-        public static final String REMAINING_SHIPS_TEMPLATE = "У игрока %s осталось - %d кораблей \n";
+        public static final String REMAINING_SHIPS_TEMPLATE = "У игрока %s осталось кораблей - %d \n";
         public static final String PLAYER_WIN_TEMPLATE = "Победил игрок %s \n";
         public static final String COORDINATE_SHOOT_X_TEMPLATE = " %s введите координату выстрела по оси X \n";
         public static final String COORDINATE_SHOOT_Y_TEMPLATE = " %s введите координату выстрела по оси Y \n";
         public static final String SHIP_SETUP_TEMPLATE = "Корабль установлен! осталось %s кораблей \n";
+        public static final String SHIP_LIMITS_TEMPLATE = "Количество - %d палубных кораблей достигло лимита! Лимит - %d\n";
+        public static final String ALL_SHIPS_DESTROYER = "Все корабли игрока - %s уничтожены!\n";
     }
 
     public static final class Prompts {
@@ -37,7 +40,9 @@ public class GameConstants {
         public static final String INVALID_INPUT_COORDINATE = "Неверный ввод, введите цифру от 1 до 10";
         public static final String INVALID_INPUT_DIRECTION = "Неверный ввод, введите букву В или Г";
         public static final String INVALID_ERROR = "Некорректный ввод";
-        public static final String SHIP_SETUP_ERROR = "Корабль не установлен, измените координаты или направление!";
+        public static final String SHIP_NOT_SETUP = "Корабль не установлен";
+        public static final String SHIPS_NEAR = "Рядом с кораблем уже есть корабль или новый корабль пересекает старый. Измените координаты!";
+
     }
 
 }

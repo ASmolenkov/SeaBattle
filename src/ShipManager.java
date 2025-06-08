@@ -15,23 +15,8 @@ public class ShipManager {
     }
 
     public void addShip(int deckCount) {
-        if (!shipLimits.containsKey(deckCount)) {
-            throw new IllegalArgumentException("Неверное количество палуб: " + deckCount);
-        }
-
         int current = currentShips.getOrDefault(deckCount, 0);
-        int limit = shipLimits.get(deckCount);
-
-        if (current >= limit) {
-            throw new IllegalStateException(
-                    "Лимит " + deckCount + "-палубных кораблей исчерпан (макс. " + limit + ")"
-            );
-        }
         currentShips.put(deckCount, current + 1);
-    }
-
-    public int getShipCount(int deckCount) {
-        return currentShips.getOrDefault(deckCount, 0);
     }
 
     public int getShipLimit(int deckCount) {
@@ -46,6 +31,5 @@ public class ShipManager {
         int limit = shipLimits.get(deckCount);
         return placed < limit;
     }
-
 
 }

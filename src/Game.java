@@ -1,3 +1,5 @@
+import Console.work.ConsoleInputReader;
+import Console.work.OutputService;
 import game.constans.GameConstants;
 
 public class Game {
@@ -6,18 +8,20 @@ public class Game {
     private Player currentPlayer;
     private final ConsoleInputReader consoleInputReader;
     private final InputValidator inputValidator;
+    private final OutputService output;
 
 
 
-    public Game() {
+    public Game(OutputService output) {
         this.consoleInputReader = new ConsoleInputReader();
         this.inputValidator = new InputValidator();
+        this.output = output;
     }
 
     public void welcome() {
-        System.out.println(GameConstants.Messages.WELCOME);
+        output.println(GameConstants.Messages.WELCOME);
         setupPlayer();
-        System.out.printf(GameConstants.Templates.GREETINGS_TEMPLATE, playerOne.getName(), playerOpponent.getName());
+        output.printf(GameConstants.Templates.GREETINGS_TEMPLATE, playerOne.getName(), playerOpponent.getName());
         startGame();
     }
 
@@ -36,7 +40,7 @@ public class Game {
     }
     private Player createPlayer(int playerNumber){
         while (true) {
-            System.out.printf(GameConstants.Templates.NAME_PLAYER_TEMPLATE,playerNumber);
+            output.printf(GameConstants.Templates.NAME_PLAYER_TEMPLATE,playerNumber);
             String namePlayer = consoleInputReader.readLine();
             if (!namePlayer.isEmpty()) {
                 return new Player(namePlayer);
@@ -46,12 +50,13 @@ public class Game {
         }
     }
     private void printShipInstallationConditions(Player player){
-        System.out.printf(GameConstants.Templates.INSTALL_THE_SHIPS_TEMPLATE, player.getName());
-        System.out.println(GameConstants.Messages.INSTALLATION_CONDITIONS);
-        System.out.println(GameConstants.Prompts.SIZE_SHIP);
-        System.out.println(GameConstants.Prompts.COORDINATE_HEAD_SHIP_X);
-        System.out.println(GameConstants.Prompts.COORDINATE_HEAD_SHIP_Y);
-        System.out.println(GameConstants.Prompts.DIRECTIONS_SHIP);
+        output.printf(GameConstants.Templates.INSTALL_THE_SHIPS_TEMPLATE, player.getName());
+        output.println(GameConstants.Messages.INSTALLATION_CONDITIONS);
+        output.println(GameConstants.Prompts.SIZE_SHIP);
+        output.println(GameConstants.Prompts.COORDINATE_HEAD_SHIP_X);
+        output.println(GameConstants.Prompts.COORDINATE_HEAD_SHIP_Y);
+        output.println(GameConstants.Prompts.DIRECTIONS_SHIP);
+
     }
 
     private void shipInstallationProcess(Player player){
@@ -77,12 +82,15 @@ public class Game {
             }
 
         }
-        System.out.printf(GameConstants.Templates.PLAYER_WIN_TEMPLATE, currentPlayer.getName());
+        output.printf(GameConstants.Templates.ALL_SHIPS_DESTROYER, playerOpponent.getName());
+        currentPlayer.getEnemyField().printField(FieldType.OPPONENT);
+        output.printf(GameConstants.Templates.PLAYER_WIN_TEMPLATE, currentPlayer.getName());
+
     }
 
     private int inputSizeShip(){
         while (true) {
-            System.out.printf(GameConstants.Templates.ENTER_TEMPLATE, GameConstants.Prompts.SIZE_SHIP + "\n");
+            output.printf(GameConstants.Templates.ENTER_TEMPLATE, GameConstants.Prompts.SIZE_SHIP + "\n");
             String sizeShip = consoleInputReader.readLine();
             try {
                 int size = Integer.parseInt(sizeShip);
@@ -90,19 +98,18 @@ public class Game {
                     return size;
                 }
                 else {
-                    System.out.println(GameConstants.Prompts.SIZE_SHIP);
+                    output.println(GameConstants.Prompts.SIZE_SHIP);
                 }
             } catch (NumberFormatException e) {
-                System.out.println(GameConstants.Errors.INVALID_INPUT_SIZE);
+                output.println(GameConstants.Errors.INVALID_INPUT_SIZE);
             }
         }
-
 
     }
 
     private int inputCoordinateShipHead(String COORDINATE_HEAD_SHIP){
         while (true) {
-            System.out.printf(GameConstants.Templates.ENTER_TEMPLATE, COORDINATE_HEAD_SHIP + "\n");
+            output.printf(GameConstants.Templates.ENTER_TEMPLATE, COORDINATE_HEAD_SHIP + "\n");
             String coordinateShip = consoleInputReader.readLine();
             try {
                 int coordinate = Integer.parseInt(coordinateShip);
@@ -110,25 +117,24 @@ public class Game {
                     return coordinate;
                 }
                 else {
-                    System.out.println(GameConstants.Errors.INVALID_INPUT_COORDINATE);
+                    output.println(GameConstants.Errors.INVALID_INPUT_COORDINATE);
                 }
             }catch (NumberFormatException e){
-                System.out.println(GameConstants.Errors.INVALID_INPUT_COORDINATE);
+                output.println(GameConstants.Errors.INVALID_INPUT_COORDINATE);
             }
 
         }
     }
     private Direction inputDirection(){
         while (true){
-            System.out.printf(GameConstants.Templates.ENTER_TEMPLATE,GameConstants.Prompts.DIRECTIONS_SHIP + "\n");
+            output.printf(GameConstants.Templates.ENTER_TEMPLATE,GameConstants.Prompts.DIRECTIONS_SHIP + "\n");
             String directionShip = consoleInputReader.readLine();
             if(directionShip.isEmpty() || inputValidator.validateInputLength(directionShip) || inputValidator.isAllLetterHOrV(directionShip)){
-                System.out.println(GameConstants.Errors.INVALID_INPUT_DIRECTION);
+                output.println(GameConstants.Errors.INVALID_INPUT_DIRECTION);
             }
             else {
                 return directionShip.equalsIgnoreCase("г")? Direction.HORIZONTAL: Direction.VERTICAL;
             }
-
         }
     }
 
@@ -143,9 +149,9 @@ public class Game {
     }
 
     private void displayCurrentTurnInfo(){
-        System.out.printf(GameConstants.Templates.PLAYER_MOVE_TEMPLATE, currentPlayer.getName());
-        System.out.printf(GameConstants.Templates.REMAINING_SHIPS_TEMPLATE, currentPlayer.getName(), currentPlayer.getOwnField().getShipCounts());
-        System.out.printf(GameConstants.Templates.REMAINING_SHIPS_TEMPLATE, playerOpponent.getName(), playerOpponent.getOwnField().getShipCounts());
+        output.printf(GameConstants.Templates.PLAYER_MOVE_TEMPLATE, currentPlayer.getName());
+        output.printf(GameConstants.Templates.REMAINING_SHIPS_TEMPLATE, currentPlayer.getName(), currentPlayer.getOwnField().getShipCounts());
+        output.printf(GameConstants.Templates.REMAINING_SHIPS_TEMPLATE, playerOpponent.getName(), playerOpponent.getOwnField().getShipCounts());
     }
 
 }
