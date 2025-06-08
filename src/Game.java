@@ -8,6 +8,7 @@ public class Game {
     private final InputValidator inputValidator;
 
 
+
     public Game() {
         this.consoleInputReader = new ConsoleInputReader();
         this.inputValidator = new InputValidator();
@@ -54,7 +55,7 @@ public class Game {
     }
 
     private void shipInstallationProcess(Player player){
-       while (player.getOwnField().getShipCounts() < player.getOwnField().MAX_COUNT_SHIPS){
+       while (player.getOwnField().getShipCounts() < PlayingField.MAX_TOTAL_COUNT_SHIPS){
            int sizeShip = inputSizeShip();
            int coordinateShipX = inputCoordinateShipHead(GameConstants.Prompts.COORDINATE_HEAD_SHIP_X);
            int coordinateShipY = inputCoordinateShipHead(GameConstants.Prompts.COORDINATE_HEAD_SHIP_Y);
@@ -64,7 +65,7 @@ public class Game {
        }
     }
     private void startWarProcess(){
-        while (!isLoose(playerOne) && !isLoose(playerOpponent)) {
+        while (notLose(playerOne) && notLose(playerOpponent)) {
             displayCurrentTurnInfo();
             currentPlayer.getEnemyField().printField(FieldType.OPPONENT);
             Coordinate shotCoordinate = currentPlayer.makeMove();
@@ -137,8 +138,8 @@ public class Game {
         playerOpponent = temp;
     }
 
-    private boolean isLoose(Player player){
-        return player.getOwnField().getShipCounts() == 0;
+    private boolean notLose(Player player){
+        return player.getOwnField().getShipCounts() != 0;
     }
 
     private void displayCurrentTurnInfo(){

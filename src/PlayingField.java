@@ -6,12 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 public class PlayingField {
-    private int width;
-    private int height;
-    private Map<Coordinate,Ship> mapShips;
-    private Map<Coordinate, ShotResult> mapShots;
+    private final int width;
+    private final int height;
+    private final Map<Coordinate,Ship> mapShips;
+    private final Map<Coordinate, ShotResult> mapShots;
     private int shipCounts;
-    public static final int MAX_COUNT_SHIPS = 3;
+    public static final int MAX_TOTAL_COUNT_SHIPS = 3;
+    private final ShipManager shipManager;
 
 
 
@@ -22,6 +23,7 @@ public class PlayingField {
         this.mapShips = isOwnField ? new HashMap<>() : null;
         this.mapShots = new HashMap<>();
         this.shipCounts = 0;
+        this.shipManager = new ShipManager();
     }
 
     public Map<Coordinate, ShotResult> getMapShots() {
@@ -32,10 +34,10 @@ public class PlayingField {
         return shipCounts;
     }
 
-    public void plusShipCounts() {
+    public void plusTotalShipCounts() {
         this.shipCounts++;
     }
-    public void minusShipCounts() {
+    public void minusTotalShipCounts() {
         this.shipCounts--;
     }
 
@@ -81,13 +83,10 @@ public class PlayingField {
                     coordinate = ship.getCoordinateHead().shift(0, i);
                 }
                 this.mapShips.put(coordinate, ship);
-
             }
-            plusShipCounts();
-            System.out.printf(GameConstants.Templates.SHIP_SETUP_TEMPLATE,(MAX_COUNT_SHIPS - shipCounts));
-        }
-        else {
-            System.out.println(GameConstants.Errors.SHIP_SETUP_ERROR);
+            plusTotalShipCounts();
+            shipManager.addShip(ship.getSize());
+            System.out.printf(GameConstants.Templates.SHIP_SETUP_TEMPLATE,(MAX_TOTAL_COUNT_SHIPS - shipCounts));
         }
     }
     public boolean shot(Coordinate coordinateShoot){
@@ -97,7 +96,7 @@ public class PlayingField {
             System.out.println(GameConstants.Messages.HIT_TARGET);
             if(!hasAdjacentShips(coordinateShoot)){
                 System.out.println(GameConstants.Messages.SHIP_DESTROYED);
-                minusShipCounts();
+                minusTotalShipCounts();
             }
             return true;
         }
@@ -116,10 +115,17 @@ public class PlayingField {
 
     private boolean isValidShipPlacement(Ship ship) {
         if (isShipOutOfBounds(ship)) {
+            System.out.println("Корабль выходит за пределы поля. Измените координаты!");
             return false;
         }
+        if(!shipManager.canPlaceShip(ship.getSize())){
+            System.out.println("Количество " + ship.getSize() + "- палубных кораблей достигло лимита! Лимит - " + shipManager.getShipLimit(ship.getSize()));
+            return false;
+        }
+
         for (Coordinate shipPart : getAllShipCoordinates(ship)) {
             if (isCoordinateOccupied(shipPart) || hasAdjacentShips(shipPart)) {
+                System.out.println("Рядом с кораблем уже есть корабль или новый корабль пересекает старый. Измените координаты!");
                 return false;
             }
         }
@@ -160,6 +166,5 @@ public class PlayingField {
         }
 
     }
-
 
 }

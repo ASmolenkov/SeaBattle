@@ -1,10 +1,10 @@
 import game.constans.GameConstants;
 
 public class Player {
-    private String name;
-    private PlayingField ownField;
-    private PlayingField enemyField;
-    private ConsoleInputReader consoleInputReader;
+    private final String name;
+    private final PlayingField ownField;
+    private final PlayingField enemyField;
+    private final ConsoleInputReader consoleInputReader;
 
 
 

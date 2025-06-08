@@ -1,7 +1,7 @@
 public class Ship {
-    private int size;
-    private Coordinate coordinateHead;
-    private Direction direction;
+    private final int  size;
+    private final Coordinate coordinateHead;
+    private final Direction direction;
 
     public Ship(int size, Coordinate coordinateHead, Direction direction) {
 
